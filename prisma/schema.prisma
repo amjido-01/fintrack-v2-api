@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  userName      String?
+  image         String?
+  refreshToken String?
+  profileCompleted Boolean   @default(false)
+  accounts      Account[]
+  workspaces    Workspace[]
+  expenses       Expense[]
+  income         Income[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+
+model Workspace {
+  id           String     @id @default(uuid())
+  workspaceName String
+  currency      String
+  description   String
+  createdBy     User      @relation(fields: [createdById], references: [id])
+  createdById   String
+  expenses      Expense[]  // Relation to the Expense model
+  income        Income[]
+  isDeleted   Boolean @default(false)
+  deletedAt   DateTime?
+  deletedBy   String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  lastActiveAt  DateTime @default(now())
+}
+
+model Expense {
+  id          String     @id @default(uuid())
+  expenseName String
+  date        DateTime
+  note        String
+  category    String
+  customCategory String?
+  amount      Float
+  createdAt   DateTime   @default(now())
+  isDeleted   Boolean @default(false)
+  deletedAt   DateTime?
+  deletedBy   String?
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  workspaceId String
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
+  @@index([userId])
+  @@index([workspaceId])
+}
+
+model Income {
+  id          String     @id @default(uuid())
+  date       DateTime
+  incomeSource   String
+  category       String
+  customCategory String
+  amount        Float
+  description  String
+  createdAt   DateTime   @default(now())
+  isDeleted   Boolean @default(false)
+  deletedAt   DateTime?
+  deletedBy   String?
+   workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+   workspaceId String
+    user        User       @relation(fields: [userId], references: [id])
+     userId      String
+       @@index([userId])
+  @@index([workspaceId])
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}

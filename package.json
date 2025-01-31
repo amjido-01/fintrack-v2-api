@@ -5,7 +5,6 @@
   "main": "index.js",
   "types": "module",
   "scripts": {
-     
     "dev": "npx tsx --env-file=.env --watch src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
@@ -16,9 +15,15 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@prisma/client": "^6.3.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.8",
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.3.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",

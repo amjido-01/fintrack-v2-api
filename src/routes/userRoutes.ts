@@ -1,33 +1,20 @@
-import express, {Request, Response} from 'express';
+import express from "express";
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  // updateUser,
+  // deleteUser
+} from "../controllers/userController";
 
 const router = express.Router();
 
-// GET /api/users
-router.get('/', (req, res: Response) => {
-  res.json({ message: 'Welcome to the Users API!' });
-});
 
-// GET /api/users/:id
-router.get('/:id', (req: Request, res: Response) => {
-  const userId = req.params.id;
-  res.json({ message: `Fetching user with ID: ${userId}` });
-});
-
-// POST /api/users
-router.post('/', (req, res: Response) => {
-  res.json({ message: 'User created successfully!' });
-});
-
-// PUT /api/users/:id
-router.put('/:id', (req: Request, res: Response) => {
-  const userId = req.params.id;
-  res.json({ message: `User with ID: ${userId} updated successfully!` });
-});
-
-// DELETE /api/users/:id
-router.delete('/:id', (req: Request, res: Response) => {
-  const userId = req.params.id;
-  res.json({ message: `User with ID: ${userId} deleted successfully!` });
-});
+// User routes
+router.get('/', getUsers);
+router.get('/:id', getUserById);
+router.post('/', createUser);
+// router.put('/:id', updateUser);
+// router.delete('/:id', deleteUser);
 
 export default router;

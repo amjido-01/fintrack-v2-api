@@ -15,7 +15,7 @@ app.use(cookieParser())
 
 
 app.get('/', (req: Request, res: Response) => {
-    res.json({ message: 'Welcome to the Express + TypeScript Server!' });
+    res.status(200).send("API is running...");;
   });
 
 // Routes
