@@ -113,7 +113,8 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       const existingUser = await prisma.user.findUnique({
           where: { email },
           include: {
-              expenses: true
+              expenses: true,
+              income: true,
           }
       });
 
