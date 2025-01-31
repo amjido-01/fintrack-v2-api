@@ -7,6 +7,8 @@ import authRoutes from "./routes/authRoutes"
 // Create a new express application instance
 const app = express();
 
+
+// middleware
 app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
