@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes"
 import authRoutes from "./routes/authRoutes"
+import workSpaceRoutes from "./routes/workSpaceRoutes"
 
 // Create a new express application instance
 const app = express();
@@ -45,6 +46,7 @@ app.get('/', (req: Request, res: Response) => {
 // Routes
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use("/api/v1", workSpaceRoutes)
 
 
 export default app;
