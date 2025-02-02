@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes"
 import authRoutes from "./routes/authRoutes"
 import workSpaceRoutes from "./routes/workSpaceRoutes"
+import incomeRoutes from "./routes/incomeRoutes"
+import expenseRoutes from "./routes/expenseRoutes"
 
 // Create a new express application instance
 const app = express();
@@ -47,6 +49,8 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use("/api/v1", workSpaceRoutes)
+app.use("/api/v1", incomeRoutes)
+app.use("/api/v1", expenseRoutes)
 
 
 export default app;

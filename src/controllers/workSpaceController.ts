@@ -5,7 +5,6 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 export const createWorkspace = async (req: Request, res: Response): Promise<any> => {
     let userData = await (req as any)?.user
 
-    console.log(userData, "from workspace")
       const { workspaceName, description, currency } = req.body;
     try {
         
@@ -161,6 +160,7 @@ export const workspace = async (req: Request, res: Response): Promise<any> => {
       })
 
       return res.status(200).json({
+        responseSuccessful: true,
         message: "hasWorkSpace",
         responseBody: hasWorkSpace
       })
