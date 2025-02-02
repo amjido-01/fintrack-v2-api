@@ -1,6 +1,6 @@
 import express, {Response, Request} from "express"
 import prisma from "../config/db"
-
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 
 export const createWorkspace = async (req: Request, res: Response): Promise<any> => {
     let userData = await (req as any)?.user
@@ -32,7 +32,8 @@ export const createWorkspace = async (req: Request, res: Response): Promise<any>
       });
 
       return res.status(201).json({
-        message: "Workspace created successfully"
+        message: "Workspace created successfully",
+        responseBody: result
       })
 
     } catch (error) {
@@ -86,3 +87,89 @@ export const checkWorkSpace = async (req: Request, res: Response): Promise<any> 
     res.status(500).json({ message: 'An error occurred while fetching the user' });
   }
 };
+
+// get workspace by Workspace ID
+export const getWorkSpace = async (req: Request, res: Response): Promise<any> => {
+    const { id } = req.params;
+
+    try {
+        const workspace = await prisma.workspace.findUnique({
+            where: {id: id},
+            include: {
+                expenses: true,
+                income: true,
+            }
+        })
+
+
+        if (!workspace) {
+            return res.status(404).json({ error: "Workspace not found" });	
+        }
+
+        return res.status(201).json({
+            responseSuccessful: true,
+            responseMessage: "Workspaces retrieved successfully",
+            responseBody: workspace
+          })
+    } catch (error: unknown) {
+        if (error instanceof PrismaClientKnownRequestError) {
+            console.error('Prisma error:', error.message);
+            return res.status(400).json({
+              responseSuccessful: false,
+              responseMessage: "Database error occurred",
+              responseBody: null
+            });
+          }
+      
+          // Handle other errors
+          if (error instanceof Error) {
+            console.error('Server error:', error.message);
+            return res.status(500).json({
+              responseSuccessful: false,
+              responseMessage: "Internal server error",
+              responseBody: null
+            });
+          }
+      
+          // Fallback for unknown errors
+          console.error('Unknown error:', error);
+          return res.status(500).json({
+            responseSuccessful: false,
+            responseMessage: "An unexpected error occurred",
+            responseBody: null
+          });
+    }
+}
+
+// Get the last user workspace
+export const workspace = async (req: Request, res: Response): Promise<any> => {
+    let userData = await (req as any)?.user
+    try {
+
+         // check for user workspaces
+    const hasWorkSpace = await prisma.workspace.findMany({
+        where: {
+          createdById: userData?.id
+        },
+        orderBy: {
+          lastActiveAt: 'desc'
+        },
+        include: {
+          expenses: true,
+          income: true
+        },
+      })
+
+      return res.status(200).json({
+        message: "hasWorkSpace",
+        responseBody: hasWorkSpace
+      })
+        
+    } catch (error) {
+        res.status(500).json({
+            responseSuccessful: false,
+            responseMessage: error,
+            responseBody: null
+        }); 
+    }
+}
