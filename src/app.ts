@@ -19,7 +19,7 @@ const corsOptions = {
 };
 
 // middleware
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
 
