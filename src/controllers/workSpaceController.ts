@@ -5,6 +5,13 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 export const createWorkspace = async (req: Request, res: Response): Promise<any> => {
     let userData = await (req as any)?.user
 
+    if (!userData?.id) {
+      return res.status(400).json({
+          responseSuccessful: false,
+          message: "User not authenticated",
+          responseBody: null
+      });
+  }
       const { workspaceName, description, currency } = req.body;
     try {
         
@@ -48,7 +55,6 @@ export const createWorkspace = async (req: Request, res: Response): Promise<any>
 // Get a single user by ID
 export const checkWorkSpace = async (req: Request, res: Response): Promise<any> => {
     const {id} = req.params
-    console.log(id, " from workspace")
 
     if (!id) {
         return res.status(400).json({ message: 'User ID is required' });
@@ -57,7 +63,7 @@ export const checkWorkSpace = async (req: Request, res: Response): Promise<any> 
   try {
 
     const user = await prisma.user.findUnique({
-        where: { id},
+        where: {id},
         select: {
             workspaces: {
                 orderBy: {
@@ -93,7 +99,7 @@ export const getWorkSpace = async (req: Request, res: Response): Promise<any> =>
 
     try {
         const workspace = await prisma.workspace.findUnique({
-            where: {id: id},
+            where: {id},
             include: {
                 expenses: true,
                 income: true,
@@ -143,8 +149,16 @@ export const getWorkSpace = async (req: Request, res: Response): Promise<any> =>
 // Get the last user workspace
 export const workspace = async (req: Request, res: Response): Promise<any> => {
     let userData = await (req as any)?.user
-    try {
 
+    if (!userData?.id) {
+      return res.status(400).json({
+          responseSuccessful: false,
+          message: "User not authenticated",
+          responseBody: null
+      });
+  }
+
+    try {
          // check for user workspaces
     const hasWorkSpace = await prisma.workspace.findMany({
         where: {
@@ -159,10 +173,16 @@ export const workspace = async (req: Request, res: Response): Promise<any> => {
         },
       })
 
+      const user = await prisma.user.findUnique({where: {id: userData?.id}})
       return res.status(200).json({
         responseSuccessful: true,
         message: "hasWorkSpace",
-        responseBody: hasWorkSpace
+        responseBody: {hasWorkSpace, user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          username: user.userName
+        }}
       })
         
     } catch (error) {
