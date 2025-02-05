@@ -20,7 +20,7 @@ export const getUserById = async (req: Request, res: Response): Promise<any> => 
       }
     })
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'User not found .........' });
     }
 
     // Respond with the user data
@@ -99,6 +99,40 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
             responseBody: null
         });
     }
+}
+
+// user profile
+export const profile = async (req: Request, res: Response): Promise<any> => {
+  let userData = await (req as any)?.user
+  console.log("hello")
+  if (!userData?.id) {
+    return res.status(400).json({
+        responseSuccessful: false,
+        message: "User not authenticated",
+        responseBody: null
+    });
+}
+  console.log(userData, "from backend profile")
+  try {
+      const user = await prisma.user.findUnique({
+          where: {id: userData.id},
+          include: {
+              expenses: true,
+              income: true,
+              workspaces: true
+          }
+      })
+      console.log("hello", user)
+      if (!user) {
+          return res.status(404).json({ message: 'User not found ,,,,,,' });
+        }
+    
+        res.json({user, message: "This is a protected route"});
+  } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.status(500).json({ message: 'Internal server error' });
+
+  }
 }
 
 // Update a user by ID

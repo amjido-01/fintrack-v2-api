@@ -5,6 +5,13 @@ import prisma from "../config/db";
 
 export const createIncome = async (req: Request, res: Response): Promise<any> => {
     let userData = await (req as any)?.user
+    if (!userData?.id) {
+      return res.status(400).json({
+          responseSuccessful: false,
+          message: "User not authenticated",
+          responseBody: null
+      });
+  }
     try {
         const {incomeSource, amount, date, category, customCategory, description, workspaceId, userId} = req.body
 

@@ -12,7 +12,7 @@ const app = express();
 
 // CORS Configuration 
 const corsOptions = {
-  origin:  "https://fintrack-v2.vercel.app", // "http://localhost:3000",  Replace with your frontend URL
+  origin: "https://fintrack-v2.vercel.app", // "http://localhost:3000", Replace with your frontend URL
   credentials: true, // Allow server to accept cookies
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -47,7 +47,7 @@ app.get('/', (req: Request, res: Response) => {
   });
 
 // Routes
-app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use("/api/v1", workSpaceRoutes)
 app.use("/api/v1", incomeRoutes)

@@ -4,6 +4,13 @@ import prisma from "../config/db"
 
 export const createExpense = async (req: Request, res: Response): Promise<any> => {
     let userData = await (req as any)?.user
+    if (!userData?.id) {
+        return res.status(400).json({
+            responseSuccessful: false,
+            message: "User not authenticated",
+            responseBody: null
+        });
+    }
     try {
         
         const { expenseName, date, amount, category, note, customCategory, workspaceId, userId } = req.body;

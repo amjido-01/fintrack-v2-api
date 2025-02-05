@@ -5,7 +5,7 @@ import { checkWorkSpace, createWorkspace, workspace, getWorkSpace } from "../con
 
 const router = express.Router();
 
-router.post('/check-workspace/:id', authenticateToken, checkWorkSpace);
+router.get('/check-workspace/:id', authenticateToken, checkWorkSpace);
 router.post("/create-workspace", authenticateToken, createWorkspace)
 router.get("/workspace", authenticateToken, workspace)
 router.get("/get-workspace/:id", authenticateToken, getWorkSpace)
