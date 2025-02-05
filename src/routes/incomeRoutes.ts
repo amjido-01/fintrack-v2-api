@@ -1,10 +1,11 @@
 import express from 'express';
 import { authenticateToken } from '../middleware/auth';
-import { createIncome } from '../controllers/incomeController';
+import { createIncome, deleteIncome } from '../controllers/incomeController';
 
 
 const router = express.Router();
 
-router.post('/create-income', authenticateToken, createIncome);
+router.post('/incomes', authenticateToken, createIncome);
+router.delete("/incomes/:id", authenticateToken, deleteIncome)
 
 export default router;

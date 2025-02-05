@@ -2,7 +2,7 @@ import express, {Response, Request} from "express"
 import prisma from "../config/db";
 
 
-
+// create income
 export const createIncome = async (req: Request, res: Response): Promise<any> => {
     let userData = await (req as any)?.user
     if (!userData?.id) {
@@ -60,4 +60,36 @@ export const createIncome = async (req: Request, res: Response): Promise<any> =>
             responseBody: null
         }); 
     }
+}
+
+
+// delete income
+export const deleteIncome = async (req: Request, res: Response): Promise<any> => {
+  const {id} = req.params
+  console.log(id, "from delete")
+
+  if (!id) {
+    return res.status(400).json({ message: 'User ID is required' });
+}
+
+  try {
+    const deletedIncome = await prisma.income.update({
+      where: {id},
+      data: {
+          isDeleted: true,
+          deletedAt: new Date()
+      }
+  })
+
+  if (!deletedIncome) {
+    return res.status(404).json({ message: 'Income not found' });
+  }
+
+  return res.status(200).json({responseBody: deletedIncome, responseSuccessful: true,
+    message: "income created successfully" });
+  
+  } catch (error) {
+    console.error("Error deleting income:", error);
+        return res.status(500).json({ message: "Failed to delete income" });
+  }
 }
