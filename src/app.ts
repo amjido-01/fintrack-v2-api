@@ -12,8 +12,8 @@ const app = express();
 
 // CORS Configuration 
 const corsOptions = {
-  // origin: "https://fintrack-v2.vercel.app", // Replace with your frontend URL
-  origin: "http://localhost:3000", // Replace with your frontend URL
+  origin: "https://fintrack-v2.vercel.app", // Replace with your frontend URL
+  // origin: "http://localhost:3000", // Replace with your frontend URL
   credentials: true, // Allow server to accept cookies
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
