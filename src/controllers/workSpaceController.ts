@@ -193,3 +193,51 @@ export const workspace = async (req: Request, res: Response): Promise<any> => {
         }); 
     }
 }
+
+// update a workspace
+export const updateWorkspace = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const {id} = req.params
+    const body =  req.body;
+    console.log(body)
+
+    if (!id) {
+        return res.status(400).json({ message: "Workspace ID is required" });
+    }
+
+    const { workspaceName, currency } = body;
+
+     // Check for valid update fields
+     if (!workspaceName && !currency) {
+      return res.status(400).json({ 
+        message: "At least one update field (workspaceName or currency) is required" 
+      });
+    }
+
+    const updatedWorkspace = await prisma.workspace.update({
+        where: { id },
+        data: {
+          ...(workspaceName && { workspaceName }), // Only update if provided
+          ...(currency && { currency }),
+        }
+    })
+    return res.status(200).json(updatedWorkspace);
+} catch (error) {
+  console.error("Error updating workspace:", error);
+
+  // Handle Prisma not found error
+  if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
+    return res.status(404).json({ 
+      error: "Workspace not found or unauthorized to update"
+    });
+  }
+
+   // Type safety for unexpected errors
+   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    
+   return res.status(500).json({ 
+     error: "Failed to update workspace",
+     details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+   });
+}
+}
