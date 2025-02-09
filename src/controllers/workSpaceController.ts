@@ -241,3 +241,27 @@ export const updateWorkspace = async (req: Request, res: Response): Promise<any>
    });
 }
 }
+
+// Delete a workspace
+export const deleteWorkspace = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const {id} = req.params
+
+    await prisma.workspace.update({
+        where: {id},
+        data: {
+            isDeleted: true,
+            deletedAt: new Date()
+        },
+        include: {
+          income: true,
+          expenses: true
+        }
+    })
+
+    return res.status(200).json({ message: "Income deleted successfully" });
+} catch (error) {
+    console.error("Error deleting income:", error);
+    return res.status(500).json({ message: "Failed to delete income" });
+}
+}

@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticateToken } from '../middleware/auth';
-import { checkWorkSpace, createWorkspace, workspace, getWorkSpace, updateWorkspace } from "../controllers/workSpaceController"
+import { checkWorkSpace, createWorkspace, workspace, getWorkSpace, updateWorkspace, deleteWorkspace } from "../controllers/workSpaceController"
 
 
 const router = express.Router();
@@ -10,5 +10,6 @@ router.post("/create-workspace", authenticateToken, createWorkspace)
 router.get("/workspace", authenticateToken, workspace)
 router.put("/update-workspace/:id", authenticateToken, updateWorkspace)
 router.get("/get-workspace/:id", authenticateToken, getWorkSpace)
+router.delete("/delete-workspace/:id", authenticateToken, deleteWorkspace)
 
 export default router;
