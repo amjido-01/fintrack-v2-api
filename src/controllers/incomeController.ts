@@ -66,7 +66,6 @@ export const createIncome = async (req: Request, res: Response): Promise<any> =>
 // delete income
 export const deleteIncome = async (req: Request, res: Response): Promise<any> => {
   const {id} = req.params
-  console.log(id, "from delete")
 
   if (!id) {
     return res.status(400).json({ message: 'User ID is required' });
@@ -91,5 +90,38 @@ export const deleteIncome = async (req: Request, res: Response): Promise<any> =>
   } catch (error) {
     console.error("Error deleting income:", error);
         return res.status(500).json({ message: "Failed to delete income" });
+  }
+}
+
+
+// edit income
+export const editIncome = async (req: Request, res: Response): Promise<any> => {
+  try {
+      const { id } = req.params;
+      const { incomeSource, date, amount, category, description } = req.body;
+      console.log("updating from the server")
+      if (!id) {
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    const existingIncome = await prisma.income.findUnique({ where: { id } });
+    if (!existingIncome) {
+      return res.status(404).json({ error: "Income record not found" });
+    }
+
+      const updatedIncome = await prisma.income.update({
+          where: { id },
+          data: {
+              incomeSource,
+              date: new Date(date),
+              amount: parseFloat(amount),
+              category,
+              description
+          }
+      })
+      return res.status(200).json(updatedIncome);
+  } catch (error) {
+      console.error("Error updating income:", error);
+      return res.status(500).json({ error: "Failed to update income" });
   }
 }
