@@ -94,3 +94,36 @@ export const deleteExpense = async (req: Request, res: Response): Promise<any> =
           return res.status(500).json({ message: "Failed to delete expense" });
     }
   }
+
+
+  // edit expense
+// Update an expense by ID
+export const editExpense = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ message: 'Expense not found' });
+        }
+        const { expenseName, date, amount, category, note } = req.body;
+
+        const existingExpense = await prisma.expense.findUnique({ where: { id } });
+        if (!existingExpense) {
+          return res.status(404).json({ error: "Income record not found" });
+        }
+
+        const updatedExpense = await prisma.expense.update({
+            where: { id },
+            data: {
+                expenseName,
+                date: new Date(date),
+                amount: parseFloat(amount),
+                category,
+                note
+            }
+        })
+        return res.status(200).json(updatedExpense);
+    } catch (error) {
+        console.error("Error updating expense:", error);
+        return res.status(500).json({ error: "Failed to update expense" });
+    }
+}

@@ -101,7 +101,7 @@ export const editIncome = async (req: Request, res: Response): Promise<any> => {
       const { incomeSource, date, amount, category, description } = req.body;
       console.log("updating from the server")
       if (!id) {
-        return res.status(400).json({ message: 'User ID is required' });
+        return res.status(400).json({ message: 'Income not found' });
     }
 
     const existingIncome = await prisma.income.findUnique({ where: { id } });
