@@ -59,7 +59,7 @@ export const checkWorkSpace = async (req: Request, res: Response): Promise<any> 
     if (!id) {
         return res.status(400).json({ message: 'User ID is required' });
     }
-
+    console.log(id, "from check workspace")
   try {
 
     const user = await prisma.user.findUnique({

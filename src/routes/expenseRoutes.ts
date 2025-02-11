@@ -5,8 +5,8 @@ import { createExpense, deleteExpense, editExpense } from '../controllers/expens
 
 const router = express.Router();
 
-router.post('/create-expense', authenticateToken, createExpense);
-router.delete("/delete-expense/:id", authenticateToken, deleteExpense);
-router.put("/edit-expense/:id", authenticateToken, editExpense)
+router.post('/expenses', authenticateToken, createExpense);
+router.delete("/expenses/:id", authenticateToken, deleteExpense);
+router.put("/expenses/:id", authenticateToken, editExpense)
 
 export default router;
