@@ -6,10 +6,10 @@ import { checkWorkSpace, createWorkspace, workspace, getWorkSpace, updateWorkspa
 const router = express.Router();
 
 router.get('/check-workspace/:id', authenticateToken, checkWorkSpace);
-router.post("/create-workspace", authenticateToken, createWorkspace)
-router.get("/workspace", authenticateToken, workspace)
-router.put("/update-workspace/:id", authenticateToken, updateWorkspace)
-router.get("/get-workspace/:id", authenticateToken, getWorkSpace)
-router.delete("/delete-workspace/:id", authenticateToken, deleteWorkspace)
+router.post("/workspaces", authenticateToken, createWorkspace) // create a new workspace
+router.get("/workspaces", authenticateToken, workspace) // get all workspaces
+router.put("/workspaces/:id", authenticateToken, updateWorkspace) // update workspace
+router.get("/workspaces/:id", authenticateToken, getWorkSpace) // get workspace by Id
+router.delete("/workspaces/:id", authenticateToken, deleteWorkspace) // delete workspace by Id
 
 export default router;

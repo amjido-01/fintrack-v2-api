@@ -63,7 +63,6 @@ export const register = async (req: Request, res: Response): Promise<any> => {
         });
 
         
-        console.log(updatedUser)
       res.status(201).json({ 
           responseSuccessful: true,
           responseMessage: 'User created successfully',
@@ -148,7 +147,6 @@ export const login = async (req: Request, res: Response): Promise<any> => {
           email: existingUser.email
       })
 
-      console.log(refreshToken, accessToken,"from login")
       await prisma.user.update({
           where: {id: existingUser.id},
           data: {refreshToken: refreshToken},

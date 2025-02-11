@@ -104,7 +104,6 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 // user profile
 export const profile = async (req: Request, res: Response): Promise<any> => {
   let userData = await (req as any)?.user
-  console.log("hello")
   if (!userData?.id) {
     return res.status(400).json({
         responseSuccessful: false,
@@ -112,7 +111,6 @@ export const profile = async (req: Request, res: Response): Promise<any> => {
         responseBody: null
     });
 }
-  console.log(userData, "from backend profile")
   try {
       const user = await prisma.user.findUnique({
           where: {id: userData.id},
